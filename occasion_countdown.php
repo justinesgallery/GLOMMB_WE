@@ -1,4 +1,6 @@
-<?php include('database.php'); ?>
+<?php
+include('database.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +20,8 @@
     <a href="add_occasion.php" class="btn btn-primary mb-4">Add New Occasion</a>
     <div class="list-group">
         <?php
-        $sql = "SELECT * FROM occasions WHERE date >= CURDATE() ORDER BY date ASC";
+        // Fetch upcoming occasions that are not marked as 'Done'
+        $sql = "SELECT * FROM occasions WHERE date >= CURDATE() AND status != 'Done' ORDER BY date ASC";
         $result = $conn->query($sql);
         
         if ($result->num_rows > 0) {
@@ -37,8 +40,10 @@
                     echo $hours_left . " hours, " . $minutes_left . " minutes, and " . $seconds_left . " seconds left";
                 }
                 echo "</span></h5>";
-                echo "<p>Date: {$row['date']}</p>";
-                echo "<p>{$row['description']}</p>";
+                echo "<p>Assigned Date: {$row['assigned_date']}</p>";
+                echo "<p>Due Date: {$row['date']}</p>";
+                echo "<p>Description: {$row['description']}</p>";
+                echo "<p>Status: {$row['status']}</p>";
                 echo "<a href='edit_occasion.php?id={$row['id']}' class='btn btn-warning btn-sm'>Edit</a> ";
                 echo "<a href='delete_occasion.php?id={$row['id']}' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this occasion?\");'>Delete</a>";
                 echo "</div>";
@@ -52,14 +57,18 @@
     <h2 class="my-4">Past Projects</h2>
     <div class="list-group">
         <?php
-        $sql = "SELECT * FROM occasions WHERE date < CURDATE() ORDER BY date DESC";
+        // Fetch past occasions and those marked as 'Done'
+        $sql = "SELECT * FROM occasions WHERE date < CURDATE() OR status = 'Done' ORDER BY date DESC";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
                 echo "<div class='list-group-item'>";
                 echo "<h5>{$row['name']} - Celebrated on {$row['date']}</h5>";
-                echo "<p>{$row['description']}</p>";
+                echo "<p>Assigned Date: {$row['assigned_date']}</p>";
+                echo "<p>Due Date: {$row['date']}</p>";
+                echo "<p>Description: {$row['description']}</p>";
+                echo "<p>Status: {$row['status']}</p>";
                 echo "<a href='edit_occasion.php?id={$row['id']}' class='btn btn-warning btn-sm'>Edit</a> ";
                 echo "<a href='delete_occasion.php?id={$row['id']}' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this occasion?\");'>Delete</a>";
                 echo "</div>";

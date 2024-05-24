@@ -6,8 +6,9 @@ if (isset($_POST['update'])) {
     $name = $_POST['name'];
     $date = $_POST['date'];
     $description = $_POST['description'];
+    $status = $_POST['status']; // New field
 
-    $sql = "UPDATE occasions SET name='$name', date='$date', description='$description' WHERE id='$id'";
+    $sql = "UPDATE occasions SET name='$name', date='$date', description='$description', status='$status' WHERE id='$id'";
 
     if ($conn->query($sql) === TRUE) {
         echo "<script>alert('Update Successful!'); window.location='occasion_countdown.php';</script>";
@@ -37,8 +38,6 @@ if (isset($_GET['id'])) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    
-
     <div class="container">
         <h1 class="my-4">Edit Occasion</h1>
         <form method="POST" action="">
@@ -54,6 +53,14 @@ if (isset($_GET['id'])) {
             <div class="form-group">
                 <label for="description">Description</label>
                 <textarea class="form-control" id="description" name="description" rows="3" required><?php echo $row['description']; ?></textarea>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select class="form-control" id="status" name="status">
+                    <option value="On Hold" <?php if ($row['status'] == 'On Hold') echo 'selected'; ?>>On Hold</option>
+                    <option value="Ongoing" <?php if ($row['status'] == 'Ongoing') echo 'selected'; ?>>Ongoing</option>
+                    <option value="Done" <?php if ($row['status'] == 'Done') echo 'selected'; ?>>Done</option>
+                </select>
             </div>
             <button type="submit" class="btn btn-primary" name="update">Update Occasion</button>
         </form>
