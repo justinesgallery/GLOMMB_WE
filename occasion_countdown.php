@@ -1,6 +1,9 @@
 <?php
 include('database.php');
-?>
+session_start();
+
+if (isset($_SESSION['username'])) { 
+    ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +19,9 @@ include('database.php');
 <body>
     
 <div class="container">
-    <h1 class="my-4">Upcoming Projects</h1>
+<a href='logout.php' class="btn btn-secondary" onclick= 'return confirm("Are you sure you want to logout?");'>Logout</a>
+<p>Username: <?php echo $_SESSION["username"];?></p>    
+<h1 class="my-4">Upcoming Projects</h1>
     <a href="add_occasion.php" class="btn btn-primary mb-4">Add New Occasion</a>
     <div class="list-group">
         <?php
@@ -112,3 +117,6 @@ include('database.php');
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+<?php } else {
+    header("Location: login_screen.php");
+} ?>
